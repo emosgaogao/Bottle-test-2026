@@ -5,48 +5,418 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>作战能力小瓶子</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;background:#f5f0eb;color:#333;min-height:100vh;-webkit-tap-highlight-color:transparent}.screen{display:none}.screen.active{display:block}#startScreen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:40px 24px;text-align:center}#startScreen h1{font-size:28px;font-weight:800;letter-spacing:2px;margin-bottom:12px}#startScreen .subtitle{font-size:15px;color:#888;margin-bottom:40px;line-height:1.6}.bottle-art{width:140px;height:140px;margin-bottom:28px}.btn-start{background:#2d6cdf;color:#fff;border:none;border-radius:50px;padding:16px 48px;font-size:18px;font-weight:600;cursor:pointer;letter-spacing:2px;box-shadow:0 4px 16px rgba(45,108,223,0.3);transition:transform .15s}.btn-start:active{transform:scale(.96)}.info-text{font-size:13px;color:#aaa;margin-top:20px}#quizScreen{padding:0 0 110px 0}.top-bar{position:fixed;top:0;left:0;right:0;z-index:100;background:#f5f0eb;padding:12px 20px 10px;border-bottom:1px solid #e8e4df}.progress-track{height:4px;background:#e0ddd8;border-radius:2px}.progress-fill{height:100%;background:#2d6cdf;border-radius:2px;transition:width .3s}.progress-label{font-size:12px;color:#aaa;margin-top:6px;text-align:center}.q-card{margin:16px;background:#fff;border-radius:16px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.04)}.q-tag{display:inline-block;font-size:11px;font-weight:600;color:#2d6cdf;background:#eaf0fb;border-radius:6px;padding:3px 8px;margin-bottom:10px}.q-text{font-size:15px;line-height:1.7;margin-bottom:16px;font-weight:500}.options{display:flex;flex-direction:column;gap:10px}.opt-btn{background:#f8f6f3;border:2px solid transparent;border-radius:12px;padding:13px 14px;font-size:14px;line-height:1.5;cursor:pointer;text-align:left;transition:all .15s;color:#555}.opt-btn:active{transform:scale(.98)}.opt-btn.selected{background:#eaf0fb;border-color:#2d6cdf;color:#2d6cdf;font-weight:600}.opt-letter{display:inline-block;width:22px;height:22px;line-height:22px;border-radius:50%;background:#e8e4df;text-align:center;font-size:12px;font-weight:700;margin-right:8px;color:#999;vertical-align:middle}.opt-btn.selected .opt-letter{background:#2d6cdf;color:#fff}.submit-area{position:fixed;bottom:0;left:0;right:0;background:linear-gradient(transparent,#f5f0eb 20%);padding:16px 20px 28px;z-index:90}.unanswered-tip{text-align:center;font-size:13px;color:#e88;margin-bottom:8px;display:none}.btn-submit{width:100%;background:#2d6cdf;color:#fff;border:none;border-radius:50px;padding:15px;font-size:17px;font-weight:600;cursor:pointer;box-shadow:0 4px 16px rgba(45,108,223,.3);transition:transform .15s}.btn-submit:active{transform:scale(.97)}.btn-submit:disabled{background:#ccc;box-shadow:none;cursor:not-allowed}.loading-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(245,240,235,.95);display:none;justify-content:center;align-items:center;flex-direction:column;z-index:200}.loading-overlay.show{display:flex}.spinner{width:40px;height:40px;border:3px solid #e0ddd8;border-top-color:#2d6cdf;border-radius:50%;animation:spin .8s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}.loading-text{margin-top:16px;font-size:15px;color:#999}#resultScreen{display:flex;flex-direction:column;align-items:center;padding:24px 16px 40px}#resultScreen h2{font-size:22px;font-weight:800;margin-bottom:4px}.result-subtitle{font-size:13px;color:#999;margin-bottom:20px}.result-canvas-wrap{width:100%;max-width:380px}#resultCanvas{width:100%;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.08)}.result-summary{margin-top:20px;text-align:center;max-width:340px}.super-power{font-size:16px;font-weight:700;color:#2d6cdf;margin-bottom:6px}.growth-area{font-size:14px;color:#e08040;margin-bottom:12px}.detail-text{font-size:13px;color:#999;line-height:1.6}.btn-save{margin-top:24px;background:#fff;color:#2d6cdf;border:2px solid #2d6cdf;border-radius:50px;padding:14px 36px;font-size:16px;font-weight:600;cursor:pointer;transition:transform .15s}.btn-save:active{transform:scale(.96)}.btn-retry{margin-top:12px;background:none;border:none;color:#aaa;font-size:14px;cursor:pointer;text-decoration:underline}
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: #f5f0eb; color: #333; min-height: 100vh;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .screen { display: none; }
+  .screen.active { display: block; }
+  #startScreen {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    min-height: 100vh; padding: 40px 24px; text-align: center;
+  }
+  #startScreen h1 { font-size: 28px; font-weight: 800; letter-spacing: 2px; margin-bottom: 12px; }
+  #startScreen .subtitle { font-size: 15px; color: #888; margin-bottom: 40px; line-height: 1.6; }
+  .bottle-art { width: 140px; height: 140px; margin-bottom: 28px; }
+  .btn-start {
+    background: #2d6cdf; color: #fff; border: none; border-radius: 50px;
+    padding: 16px 48px; font-size: 18px; font-weight: 600; cursor: pointer;
+    letter-spacing: 2px; box-shadow: 0 4px 16px rgba(45,108,223,0.3);
+    transition: transform .15s;
+  }
+  .btn-start:active { transform: scale(.96); }
+  .info-text { font-size: 13px; color: #aaa; margin-top: 20px; }
+  #quizScreen { padding: 0 0 110px 0; }
+  .top-bar {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: #f5f0eb; padding: 12px 20px 10px;
+    border-bottom: 1px solid #e8e4df;
+  }
+  .progress-track { height: 4px; background: #e0ddd8; border-radius: 2px; }
+  .progress-fill { height: 100%; background: #2d6cdf; border-radius: 2px; transition: width .3s; }
+  .progress-label { font-size: 12px; color: #aaa; margin-top: 6px; text-align: center; }
+  .q-card {
+    margin: 16px; background: #fff; border-radius: 16px;
+    padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,.04);
+  }
+  .q-tag {
+    display: inline-block; font-size: 11px; font-weight: 600;
+    color: #2d6cdf; background: #eaf0fb; border-radius: 6px;
+    padding: 3px 8px; margin-bottom: 10px;
+  }
+  .q-text { font-size: 15px; line-height: 1.7; margin-bottom: 16px; font-weight: 500; }
+  .options { display: flex; flex-direction: column; gap: 10px; }
+  .opt-btn {
+    background: #f8f6f3; border: 2px solid transparent; border-radius: 12px;
+    padding: 13px 14px; font-size: 14px; line-height: 1.5;
+    cursor: pointer; text-align: left; transition: all .15s; color: #555;
+  }
+  .opt-btn:active { transform: scale(.98); }
+  .opt-btn.selected { background: #eaf0fb; border-color: #2d6cdf; color: #2d6cdf; font-weight: 600; }
+  .opt-letter {
+    display: inline-block; width: 22px; height: 22px; line-height: 22px;
+    border-radius: 50%; background: #e8e4df; text-align: center;
+    font-size: 12px; font-weight: 700; margin-right: 8px; color: #999;
+    vertical-align: middle;
+  }
+  .opt-btn.selected .opt-letter { background: #2d6cdf; color: #fff; }
+  .submit-area {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: linear-gradient(transparent, #f5f0eb 20%);
+    padding: 16px 20px 28px; z-index: 90;
+  }
+  .unanswered-tip { text-align: center; font-size: 13px; color: #e88; margin-bottom: 8px; display: none; }
+  .btn-submit {
+    width: 100%; background: #2d6cdf; color: #fff; border: none; border-radius: 50px;
+    padding: 15px; font-size: 17px; font-weight: 600; cursor: pointer;
+    box-shadow: 0 4px 16px rgba(45,108,223,.3); transition: transform .15s;
+  }
+  .btn-submit:active { transform: scale(.97); }
+  .btn-submit:disabled { background: #ccc; box-shadow: none; cursor: not-allowed; }
+  .loading-overlay {
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(245,240,235,.95); display: none;
+    justify-content: center; align-items: center; flex-direction: column; z-index: 200;
+  }
+  .loading-overlay.show { display: flex; }
+  .spinner {
+    width: 40px; height: 40px; border: 3px solid #e0ddd8;
+    border-top-color: #2d6cdf; border-radius: 50%;
+    animation: spin .8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loading-text { margin-top: 16px; font-size: 15px; color: #999; }
+  #resultScreen {
+    display: flex; flex-direction: column; align-items: center;
+    padding: 24px 16px 40px;
+  }
+  #resultScreen h2 { font-size: 22px; font-weight: 800; margin-bottom: 4px; }
+  .result-subtitle { font-size: 13px; color: #999; margin-bottom: 20px; }
+  .result-canvas-wrap { width: 100%; max-width: 380px; }
+  #resultCanvas {
+    width: 100%; border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,.08);
+  }
+  .result-summary { margin-top: 20px; text-align: center; max-width: 340px; }
+  .super-power { font-size: 16px; font-weight: 700; color: #2d6cdf; margin-bottom: 6px; }
+  .growth-area { font-size: 14px; color: #e08040; margin-bottom: 12px; }
+  .detail-text { font-size: 13px; color: #999; line-height: 1.6; }
+  .btn-save {
+    margin-top: 24px; background: #fff; color: #2d6cdf; border: 2px solid #2d6cdf;
+    border-radius: 50px; padding: 14px 36px; font-size: 16px; font-weight: 600;
+    cursor: pointer; transition: transform .15s;
+  }
+  .btn-save:active { transform: scale(.96); }
+  .btn-retry {
+    margin-top: 12px; background: none; border: none; color: #aaa;
+    font-size: 14px; cursor: pointer; text-decoration: underline;
+  }
 </style>
 </head>
 <body>
 <div id="startScreen" class="screen active">
-<svg class="bottle-art" viewBox="0 0 140 140"><rect x="52" y="16" width="36" height="8" rx="3" fill="none" stroke="#333" stroke-width="2.5"/><path d="M56 24 Q56 32 46 42 L46 106 Q46 124 70 124 Q94 124 94 106 L94 42 Q84 32 84 24" fill="none" stroke="#333" stroke-width="2.5" stroke-linejoin="round"/><path d="M48 88 L48 104 Q48 122 70 122 Q92 122 92 104 L92 88 Z" fill="rgba(45,108,223,.22)" stroke="none"/><path d="M48 88 Q70 83 92 88" fill="rgba(45,108,223,.32)" stroke="none"/></svg>
-<h1>作战能力小瓶子</h1>
-<p class="subtitle">9项能力 · 45道情境题 · 2分钟了解自己<br>看看你的能力瓶子里装了多少</p>
-<button class="btn-start" onclick="startQuiz()">开始测试</button>
-<p class="info-text">所有数据仅在本地计算，不会上传</p>
+  <svg class="bottle-art" viewBox="0 0 140 140">
+    <rect x="52" y="16" width="36" height="8" rx="3" fill="none" stroke="#333" stroke-width="2.5"/>
+    <path d="M56 24 Q56 32 46 42 L46 106 Q46 124 70 124 Q94 124 94 106 L94 42 Q84 32 84 24" fill="none" stroke="#333" stroke-width="2.5" stroke-linejoin="round"/>
+    <path d="M48 88 L48 104 Q48 122 70 122 Q92 122 92 104 L92 88 Z" fill="rgba(45,108,223,.22)" stroke="none"/>
+    <path d="M48 88 Q70 83 92 88" fill="rgba(45,108,223,.32)" stroke="none"/>
+  </svg>
+  <h1>作战能力小瓶子</h1>
+  <p class="subtitle">9项能力 · 45道情境题 · 2分钟了解自己<br>看看你的能力瓶子里装了多少</p>
+  <button class="btn-start" onclick="startQuiz()">开始测试</button>
+  <p class="info-text">所有数据仅在本地计算，不会上传</p>
 </div>
 <div id="quizScreen" class="screen">
-<div class="top-bar"><div class="progress-track"><div class="progress-fill" id="progressFill"></div></div><div class="progress-label" id="progressLabel">0 / 45</div></div>
-<div id="quizContent" style="padding-top:56px;"></div>
-<div class="submit-area"><p class="unanswered-tip" id="unansweredTip">还有题目未作答哦</p><button class="btn-submit" id="btnSubmit" disabled onclick="submitQuiz()">查看我的能力瓶子</button></div>
+  <div class="top-bar">
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="progress-label" id="progressLabel">0 / 45</div>
+  </div>
+  <div id="quizContent" style="padding-top:56px;"></div>
+  <div class="submit-area">
+    <p class="unanswered-tip" id="unansweredTip">还有题目未作答哦</p>
+    <button class="btn-submit" id="btnSubmit" disabled onclick="submitQuiz()">查看我的能力瓶子</button>
+  </div>
 </div>
-<div class="loading-overlay" id="loadingOverlay"><div class="spinner"></div><p class="loading-text">正在装填你的能力瓶子...</p></div>
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="spinner"></div>
+  <p class="loading-text">正在装填你的能力瓶子...</p>
+</div>
 <div id="resultScreen" class="screen">
-<h2>你的作战能力小瓶子</h2>
-<p class="result-subtitle" id="resultSubtitle"></p>
-<div class="result-canvas-wrap"><canvas id="resultCanvas"></canvas></div>
-<div class="result-summary" id="resultSummary"></div>
-<button class="btn-save" onclick="saveResult()">长按图片保存 · 或截图分享</button>
-<button class="btn-retry" onclick="retryQuiz()">重新测试</button>
+  <h2>你的作战能力小瓶子</h2>
+  <p class="result-subtitle" id="resultSubtitle"></p>
+  <div class="result-canvas-wrap"><canvas id="resultCanvas"></canvas></div>
+  <div class="result-summary" id="resultSummary"></div>
+  <button class="btn-save" onclick="saveResult()">长按图片保存 · 或截图分享</button>
+  <button class="btn-retry" onclick="retryQuiz()">重新测试</button>
 </div>
 <script>
-const CATS=[{name:'审美力',icon:'🎨',desc:'对美的感知力、判断力和细节敏感度',questions:[{text:'你打开一个新App，首页加载完的瞬间，你最留意的是——',opts:['整体配色和视觉风格是否统一、舒服','字体大小和排版是否清晰好读','功能入口在哪，赶紧找我要用的','没什么特别感觉，能用就行']},{text:'朋友发来两张拍同一景色的照片让你选一张，你会怎么判断——',opts:['看构图、光线和色彩层次，选更有氛围感的','看主体是否突出，选更清晰的','看哪张里有更多信息元素','随便选一张，差不多']},{text:'你要布置自己的办公桌/书桌，你会——',opts:['考虑整体色调和物件的搭配关系，反复调整','摆几样喜欢的东西，看着顺眼就行','以实用为主，东西放好找的位置','不太在意布置，能用就行']},{text:'走在街上，你更容易注意到——',opts:['某个店铺的门面设计或橱窗陈列很有品味','某个广告牌的颜色搭配有点奇怪','街上的人流和交通状况','一般不会特别注意周围环境']},{text:'你觉得一个"好看的设计"最重要的特质是——',opts:['比例、节奏和留白的关系恰到好处','有一个让人印象深刻的亮点','整洁工整，不杂乱','说不清楚，好看就是好看']}]},{name:'技术咖',icon:'💻',desc:'对新工具的学习意愿和上手速度',questions:[{text:'团队引入了一个全新的项目管理工具，你会——',opts:['第一时间注册，把所有功能都点一遍','跟着教程走一遍，够用就行','等同事用顺了再学','能不用就尽量用老办法']},{text:'手机/电脑系统提示有新版本更新，你通常——',opts:['很期待新功能，尽快更新并体验变化','过几天再更新，看看别人有没有问题','能拖就拖，怕新版本不好用','从来不主动更新']},{text:'你正在用的软件突然报错，无法正常使用，你会——',opts:['先看错误提示，然后搜索解决方案，尝试自己修','重启试试，不行就搜一下','问同事或朋友怎么弄','找IT/技术支持帮忙']},{text:'面对一个你从没用过的电子设备，你——',opts:['不看说明书，先摸索着操作一遍','大概翻一下说明书的关键部分','仔细看完说明书再动手','让别人帮我设好，我直接用']},{text:'对于"自动化"这个概念，你的态度是——',opts:['越多越好，凡是重复的事都想自动化','重要的重复任务值得自动化','偶尔想想，但懒得动手配','手动做也没多费事']}]},{name:'逻辑思考',icon:'🤔',desc:'因果判断、识别逻辑漏洞和结构化推理',questions:[{text:'有人说"这家公司利润增长了，所以产品一定变好了"，你的反应是——',opts:['利润增长可能有很多原因，不能直接推产品变好','有点道理，但感觉还缺信息','大概是这样吧','挺有道理的']},{text:'你看到新闻标题说"吃X的人更长寿"，你会——',opts:['先看研究设计：样本量？控制变量？相关性≠因果？','觉得有点意思，但不会轻易相信','半信半疑，看看再说','觉得有研究支持，应该靠谱']},{text:'你需要向别人解释一个复杂问题，你会——',opts:['先把问题拆成几个关键因素，再逐一说明关系','按时间或步骤顺序解释','用类比的方式让对方理解','直接说结论，细节对方自己体会']},{text:'"成功的人都早起，所以早起能让人成功"——你觉得——',opts:['典型的因果倒置/相关≠因果，不一定成立','早起可能有帮助，但不是因果','有一定道理','说得对']},{text:'看到一个"惊人结论"的报告，你——',opts:['先看方法论和数据来源，再决定信不信结论','看结论是否符合常理，太反常就怀疑','如果来源看起来权威就相信','不太会质疑']}]},{name:'沟通协作',icon:'🤝',desc:'信息传递的准确性和协作中的角色适应性',questions:[{text:'你和同事对方案有不同意见，讨论陷入僵局，你通常会——',opts:['先确认双方分歧的焦点在哪，再逐个讨论','找一个折中方案','让对方先说说看','坚持自己的想法，不想浪费时间']},{text:'你需要把一个专业概念解释给完全不懂的同事听，你会——',opts:['先了解对方的认知框架，用能理解的方式类比','用自己的话重新组织语言讲一遍','直接说，不懂的话再问','让ta自己去查资料']},{text:'你发现同事理解错了你的意思，导致工作出了偏差，你——',opts:['先回顾哪个环节信息没传到位，用新方式重新沟通','直接纠正，告诉ta正确做法','自己把偏差的部分改了','有点烦躁，觉得对方不够认真']},{text:'收到一个模糊的任务指令（"你看着办"），你会——',opts:['把模糊点列出来，找发布者逐个确认','按自己的理解先做，做完再确认','凭经验做，差不多就行','很头疼，不知道怎么开始']},{text:'团队里有人在讨论中一直沉默，你会——',opts:['用开放式问题邀请ta发表看法','会注意到，但不会特意去问','没特别留意谁在说谁没说','不说话就不说话，自愿参与']}]},{name:'同理心',icon:'✨',desc:'视角转换和情感共振能力',questions:[{text:'朋友跟你诉苦说被领导批评了，你第一反应是——',opts:['能感受到ta的委屈，先让ta说完','理解ta的感受，同时也会想领导为什么批评','马上帮ta分析问题出在哪','告诉ta别太在意，这很正常']},{text:'你发现一个平时开朗的同事今天明显不太对劲，你会——',opts:['找个自然的时机私下关心一下','注意到了，但不确定要不要问','可能不会注意到','注意到了，但觉得是私事不该过问']},{text:'有人跟你倾诉一个你觉得"没什么大不了"的问题，你会——',opts:['意识到对ta来说是大事，尊重ta的感受','忍不住想劝ta往好处想','不太理解为什么这事这么严重','直接说"这有什么好纠结的"']},{text:'你听到一个来自完全不同文化背景的人的做法，你的反应是——',opts:['很好奇ta的背景如何塑造了这个选择','觉得有趣，但不太理解','下意识觉得有点奇怪','按自己的标准判断对不对']},{text:'别人给你反馈说你某件事做得不好，你的第一反应是——',opts:['先接纳对方的感受，再想想ta说的有没有道理','有点不舒服，但会认真听','本能想解释或辩解','不太在意别人的评价']}]},{name:'领导力',icon:'🚀',desc:'主动性、决策力和影响力',questions:[{text:'项目突然遇到紧急问题，但没人站出来，你会——',opts:['快速判断最关键的下一步，主动分配任务','先提一个初步方向，让大家一起讨论','等有人牵头了再配合','默默做好自己手上的事']},{text:'团队士气低落，进度落后，你——',opts:['分析根本原因，制定恢复计划，同时给大家鼓劲','提议开个会，大家一起想办法','自己加把劲多做一些','觉得不是自己能改变的']},{text:'需要向上级汇报一个不太好的消息，你——',opts:['带着问题和解决方案一起汇报','先说明问题，再提议怎么处理','硬着头皮汇报，等领导指示','能拖就拖，希望情况好转']},{text:'你做了一个决定，后来发现可能不够好，你——',opts:['主动承认并及时调整，不让面子影响判断','私下调整方向，不太声张','维持原决定，避免显得反复','很难接受自己判断失误']},{text:'团队中有两个人发生冲突，你——',opts:['分别了解情况，找到共识点，促成对话','劝大家和气一些','不想卷入，让他们自己解决','选择站一边']}]},{name:'脑洞达人',icon:'💡',desc:'发散思维和非常规联想能力',questions:[{text:'如果让你用"雨伞"设计一个新产品，你会——',opts:['先拆解雨伞的结构和功能，再重新组合','联想雨伞的隐喻，从概念出发','在雨伞上加一些新功能','想不出来，雨伞就是雨伞']},{text:'头脑风暴时，你的风格是——',opts:['提出看似天马行空的想法，再从中找可行性','在别人想法的基础上延伸','主要提实操性强的建议','不太喜欢头脑风暴，更喜欢独立思考']},{text:'你看到一个普通的物品（比如回形针），你能想到多少种非常规用途——',opts:['5种以上，越想越有趣','3-4种，有些挺有意思','1-2种比较合理的','除了夹纸想不到别的']},{text:'当所有人对某个问题都在用同一种思路时，你——',opts:['会想"如果反过来呢？"或"有没有完全不同的入口？"','偶尔会有不同的想法冒出来','觉得大家的思路应该是对的','跟着大方向走']},{text:'你对"规则"和"惯例"的态度是——',opts:['规则是用来被挑战的，先问"为什么必须这样"','可以在规则内找缝隙创新','规则存在有道理，尽量遵守','严格遵守，不折腾']}]},{name:'演讲表达',icon:'📢',desc:'结构化表达、心理舒适度和观众意识',questions:[{text:'临时被叫上台做3分钟分享，你的状态是——',opts:['脑子里快速搭框架，然后开讲','有点紧张，但能组织出主要内容','心跳加速，勉强说出几个要点','大脑一片空白']},{text:'演讲时你注意到台下有人在看手机，你会——',opts:['调整节奏或加一个互动环节，重新吸引注意力','有点受影响，但继续讲','心里有点挫败，但面不改色','不太关注台下反应']},{text:'别人让你"简单说说你的想法"时，你——',opts:['能迅速用2-3句话抓住核心','能说清楚，但可能比较啰嗦','需要想一会儿才能组织语言','经常说完觉得没表达到位']},{text:'你讲完一段话，对方说"我没太听懂"，你——',opts:['不觉得是对方的问题，换一种方式重新解释','稍微调整再说一遍','有点沮丧，觉得自己表达不行','觉得对方理解力有问题']},{text:'在非正式场合（饭局、聚会）被点名发言，你——',opts:['能自然地接住，说几句得体又有趣的话','能说，但有点拘谨','很不自在，说几句就结束','能躲就躲']}]},{name:'情绪调节',icon:'🧘',desc:'认知重评能力和情绪觉察',questions:[{text:'忙了一天回家发现快递丢了，你会——',opts:['先处理问题（联系快递），同时觉察自己有点烦躁但不过度','告诉自己不算大事，很快能过去','心里烦一会儿，刷手机转移注意力','越想越气，情绪影响好一阵子']},{text:'重要的面试/汇报之前，你感到很紧张，你会——',opts:['接纳紧张是正常的，做几次呼吸调整，专注准备内容','告诉自己"没什么大不了"来压住紧张','尽量让自己分心想别的','紧张到无法集中注意力']},{text:'你和亲近的人发生了争吵，事后你——',opts:['能冷静回顾：我真正在气什么？对方的立场是什么？','觉得双方都有问题，想和好','一直在想对方哪里不对','情绪很激动，很难冷静下来']},{text:'你做了一个让你后悔的决定，你会——',opts:['承认后悔，分析原因以避免重复，然后放下','反思一下，但还是会想很久','不断回想"如果当时……就好了"','很难原谅自己']},{text:'你正在做一件很重要的事，但不断被消息打断，你——',opts:['意识到烦躁在积累，主动设一个"免打扰"时段','忍着烦躁继续做','一边处理消息一边做，效率很低','很烦，最后什么都做不好']}]}];
-let flatQuestions=[];
-CATS.forEach((cat,ci)=>{cat.questions.forEach((q,qi)=>{flatQuestions.push({catIdx:ci,qIdx:qi,text:q.text,opts:q.opts,catName:cat.name,catIcon:cat.icon})})});
-function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
-flatQuestions=shuffle(flatQuestions);
-const TOTAL=flatQuestions.length;
-const answers={};
-function startQuiz(){document.getElementById('startScreen').classList.remove('active');document.getElementById('quizScreen').classList.add('active');renderQuiz()}
-function renderQuiz(){const c=document.getElementById('quizContent');const letters=['A','B','C','D'];let h='';flatQuestions.forEach((q,idx)=>{h+=`<div class="q-card" id="qcard-${idx}"><div class="q-tag">${q.catIcon} ${q.catName}</div><div class="q-text"><span style="color:#2d6cdf;font-weight:700;">${idx+1}.</span> ${q.text}</div><div class="options">`;q.opts.forEach((o,oi)=>{h+=`<div class="opt-btn" data-idx="${idx}" data-oi="${oi}" onclick="pick(this,${idx},${oi})"><span class="opt-letter">${letters[oi]}</span>${o}</div>`});h+=`</div></div>`});c.innerHTML=h;updateProgress()}
-function pick(el,idx,oi){answers[idx]=oi;const card=document.getElementById(`qcard-${idx}`);card.querySelectorAll('.opt-btn').forEach(b=>b.classList.remove('selected'));el.classList.add('selected');updateProgress()}
-function updateProgress(){const n=Object.keys(answers).length;document.getElementById('progressFill').style.width=(n/TOTAL*100)+'%';document.getElementById('progressLabel').textContent=`${n} / ${TOTAL}`;document.getElementById('btnSubmit').disabled=n<TOTAL;if(n>=TOTAL)document.getElementById('unansweredTip').style.display='none'}
-function submitQuiz(){const n=Object.keys(answers).length;if(n<TOTAL){document.getElementById('unansweredTip').style.display='block';for(let i=0;i<TOTAL;i++){if(answers[i]===undefined){document.getElementById(`qcard-${i}`).scrollIntoView({behavior:'smooth',block:'center'});return}}return}document.getElementById('quizScreen').classList.remove('active');document.getElementById('loadingOverlay').classList.add('show');const scores=CATS.map(()=>0);flatQuestions.forEach((q,idx)=>{const oi=answers[idx];scores[q.catIdx]+=(4-oi)});const result=CATS.map((cat,ci)=>({name:cat.name,icon:cat.icon,score:scores[ci],max:cat.questions.length*4}));setTimeout(()=>{document.getElementById('loadingOverlay').classList.remove('show');document.getElementById('resultScreen').classList.add('active');drawResult(result);buildSummary(result)},1200)}
-function drawResult(scores){const canvas=document.getElementById('resultCanvas');const dpr=Math.min(window.devicePixelRatio||2,3);const cw=380,ch=560;canvas.width=cw*dpr;canvas.height=ch*dpr;canvas.style.width='100%';const ctx=canvas.getContext('2d');ctx.scale(dpr,dpr);ctx.fillStyle='#faf8f5';ctx.fillRect(0,0,cw,ch);ctx.fillStyle='#333';ctx.font='bold 22px "PingFang SC","Microsoft YaHei",sans-serif';ctx.textAlign='center';ctx.fillText('作战能力小瓶子',cw/2,36);ctx.font='13px "PingFang SC","Microsoft YaHei",sans-serif';ctx.fillStyle='#999';ctx.fillText('你的能力档案',cw/2,54);const cols=3,rows=3;const cellW=cw/cols;const cellH=(ch-72)/rows;const bW=60,bH=84,bNeckW=28,bNeckH=14,bR=12;scores.forEach((s,i)=>{const col=i%cols,row=Math.floor(i/cols);const cx=cellW*col+cellW/2;const cy=72+cellH*row+cellH/2-8;const bL=cx-bW/2,bT=cy-bH/2+bNeckH,bRt=cx+bW/2,bB=cy+bH/2;ctx.beginPath();ctx.moveTo(cx-bNeckW/2,bT);ctx.lineTo(cx-bNeckW/2,bT-bNeckH);ctx.lineTo(cx+bNeckW/2,bT-bNeckH);ctx.lineTo(cx+bNeckW/2,bT);ctx.strokeStyle='#444';ctx.lineWidth=2;ctx.stroke();ctx.beginPath();ctx.moveTo(cx-bNeckW/2-3,bT-bNeckH);ctx.lineTo(cx+bNeckW/2+3,bT-bNeckH);ctx.strokeStyle='#444';ctx.lineWidth=2.5;ctx.stroke();function bodyPath(inset){const d=inset||0;ctx.beginPath();ctx.moveTo(bL+bR+d,bT+d);ctx.lineTo(bRt-bR-d,bT+d);ctx.quadraticCurveTo(bRt-d,bT+d,bRt-d,bT+bR+d);ctx.lineTo(bRt-d,bB-bR-d);ctx.quadraticCurveTo(bRt-d,bB-d,bRt-bR-d,bB-d);ctx.lineTo(bL+bR+d,bB-d);ctx.quadraticCurveTo(bL+d,bB-d,bL+d,bB-bR-d);ctx.lineTo(bL+d,bT+bR+d);ctx.quadraticCurveTo(bL+d,bT+d,bL+bR+d,bT+d);ctx.closePath()}bodyPath(0);ctx.strokeStyle='#444';ctx.lineWidth=2;ctx.stroke();const pct=s.score/s.max;if(pct>0.01){const liqH=(bH-8)*pct;const liqTop=bB-4-liqH;ctx.save();bodyPath(2);ctx.clip();const grad=ctx.createLinearGradient(0,liqTop,0,bB);grad.addColorStop(0,'rgba(45,108,223,0.35)');grad.addColorStop(1,'rgba(45,108,223,0.65)');ctx.fillStyle=grad;ctx.fillRect(bL+2,liqTop,bW-4,bB-liqTop-2);ctx.beginPath();ctx.moveTo(bL+2,liqTop);ctx.quadraticCurveTo(cx,liqTop-4,bRt-2,liqTop);ctx.lineTo(bRt-2,liqTop+4);ctx.quadraticCurveTo(cx,liqTop,bL+2,liqTop+4);ctx.closePath();ctx.fillStyle='rgba(45,108,223,0.22)';ctx.fill();ctx.beginPath();ctx.ellipse(bL+12,liqTop+liqH*0.3,4,Math.max(liqH*0.2,2),0,0,Math.PI*2);ctx.fillStyle='rgba(255,255,255,0.3)';ctx.fill();ctx.restore()}ctx.fillStyle='#2d6cdf';ctx.font='bold 16px "PingFang SC","Microsoft YaHei",sans-serif';ctx.textAlign='center';ctx.fillText(Math.round(pct*100)+'%',cx,cy+2);ctx.fillStyle='#333';ctx.font='13px "PingFang SC","Microsoft YaHei",sans-serif';ctx.fillText(s.icon+' '+s.name,cx,bB+20)})}
-function buildSummary(scores){const sorted=[...scores].sort((a,b)=>b.score-a.score);const top=sorted[0],bottom=sorted[sorted.length-1];document.getElementById('resultSubtitle').textContent=`满分战士 ${top.name}，修炼方向 ${bottom.name}`;document.getElementById('resultSummary').innerHTML=`<p class="super-power">${top.icon} 你的超能力：${top.name} ${Math.round(top.score/top.max*100)}%</p><p class="growth-area">${bottom.icon} 修炼方向：${bottom.name} ${Math.round(bottom.score/bottom.max*100)}%</p><p class="detail-text">每个瓶子代表一项能力，蓝色液面越高说明你在这方面的倾向越强。这不是能力的上限，而是当前的习惯倾向——任何能力都可以通过练习提升！</p>`}
-function saveResult(){const canvas=document.getElementById('resultCanvas');try{canvas.toBlob(blob=>{if(blob){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='作战能力小瓶子.png';document.body.appendChild(a);a.click();document.body.removeChild(a)}},'image/png')}catch(e){alert('请长按图片保存，或截图分享')}}
-function retryQuiz(){Object.keys(answers).forEach(k=>delete answers[k]);flatQuestions=shuffle(flatQuestions);document.getElementById('resultScreen').classList.remove('active');document.getElementById('startScreen').classList.add('active');document.getElementById('progressFill').style.width='0%';document.getElementById('progressLabel').textContent='0 / 45'}
+const CATS = [
+  { name:'审美力', icon:'🎨', desc:'对美的感知力、判断力和细节敏感度', questions:[
+    { text:'你打开一个新App，首页加载完的瞬间，你最留意的是——', opts:['整体配色和视觉风格是否统一、舒服','字体大小和排版是否清晰好读','功能入口在哪，赶紧找我要用的','没什么特别感觉，能用就行'] },
+    { text:'朋友发来两张拍同一景色的照片让你选一张，你会怎么判断——', opts:['看构图、光线和色彩层次，选更有氛围感的','看主体是否突出，选更清晰的','看哪张里有更多信息元素','随便选一张，差不多'] },
+    { text:'你要布置自己的办公桌/书桌，你会——', opts:['考虑整体色调和物件的搭配关系，反复调整','摆几样喜欢的东西，看着顺眼就行','以实用为主，东西放好找的位置','不太在意布置，能用就行'] },
+    { text:'走在街上，你更容易注意到——', opts:['某个店铺的门面设计或橱窗陈列很有品味','某个广告牌的颜色搭配有点奇怪','街上的人流和交通状况','一般不会特别注意周围环境'] },
+    { text:'你觉得一个"好看的设计"最重要的特质是——', opts:['比例、节奏和留白的关系恰到好处','有一个让人印象深刻的亮点','整洁工整，不杂乱','说不清楚，好看就是好看'] }
+  ]},
+  { name:'技术咖', icon:'💻', desc:'对新工具的学习意愿和上手速度', questions:[
+    { text:'团队引入了一个全新的项目管理工具，你会——', opts:['第一时间注册，把所有功能都点一遍','跟着教程走一遍，够用就行','等同事用顺了再学','能不用就尽量用老办法'] },
+    { text:'手机/电脑系统提示有新版本更新，你通常——', opts:['很期待新功能，尽快更新并体验变化','过几天再更新，看看别人有没有问题','能拖就拖，怕新版本不好用','从来不主动更新'] },
+    { text:'你正在用的软件突然报错，无法正常使用，你会——', opts:['先看错误提示，然后搜索解决方案，尝试自己修','重启试试，不行就搜一下','问同事或朋友怎么弄','找IT/技术支持帮忙'] },
+    { text:'面对一个你从没用过的电子设备，你——', opts:['不看说明书，先摸索着操作一遍','大概翻一下说明书的关键部分','仔细看完说明书再动手','让别人帮我设好，我直接用'] },
+    { text:'对于"自动化"这个概念，你的态度是——', opts:['越多越好，凡是重复的事都想自动化','重要的重复任务值得自动化','偶尔想想，但懒得动手配','手动做也没多费事'] }
+  ]},
+  { name:'逻辑思考', icon:'🤔', desc:'因果判断、识别逻辑漏洞和结构化推理', questions:[
+    { text:'有人说"这家公司利润增长了，所以产品一定变好了"，你的反应是——', opts:['利润增长可能有很多原因，不能直接推产品变好','有点道理，但感觉还缺信息','大概是这样吧','挺有道理的'] },
+    { text:'你看到新闻标题说"吃X的人更长寿"，你会——', opts:['先看研究设计：样本量？控制变量？相关性≠因果？','觉得有点意思，但不会轻易相信','半信半疑，看看再说','觉得有研究支持，应该靠谱'] },
+    { text:'你需要向别人解释一个复杂问题，你会——', opts:['先把问题拆成几个关键因素，再逐一说明关系','按时间或步骤顺序解释','用类比的方式让对方理解','直接说结论，细节对方自己体会'] },
+    { text:'"成功的人都早起，所以早起能让人成功"——你觉得——', opts:['典型的因果倒置/相关≠因果，不一定成立','早起可能有帮助，但不是因果','有一定道理','说得对'] },
+    { text:'看到一个"惊人结论"的报告，你——', opts:['先看方法论和数据来源，再决定信不信结论','看结论是否符合常理，太反常就怀疑','如果来源看起来权威就相信','不太会质疑'] }
+  ]},
+  { name:'沟通协作', icon:'🤝', desc:'信息传递的准确性和协作中的角色适应性', questions:[
+    { text:'你和同事对方案有不同意见，讨论陷入僵局，你通常会——', opts:['先确认双方分歧的焦点在哪，再逐个讨论','找一个折中方案','让对方先说说看','坚持自己的想法，不想浪费时间'] },
+    { text:'你需要把一个专业概念解释给完全不懂的同事听，你会——', opts:['先了解对方的认知框架，用能理解的方式类比','用自己的话重新组织语言讲一遍','直接说，不懂的话再问','让ta自己去查资料'] },
+    { text:'你发现同事理解错了你的意思，导致工作出了偏差，你——', opts:['先回顾哪个环节信息没传到位，用新方式重新沟通','直接纠正，告诉ta正确做法','自己把偏差的部分改了','有点烦躁，觉得对方不够认真'] },
+    { text:'收到一个模糊的任务指令（"你看着办"），你会——', opts:['把模糊点列出来，找发布者逐个确认','按自己的理解先做，做完再确认','凭经验做，差不多就行','很头疼，不知道怎么开始'] },
+    { text:'团队里有人在讨论中一直沉默，你会——', opts:['用开放式问题邀请ta发表看法','会注意到，但不会特意去问','没特别留意谁在说谁没说','不说话就不说话，自愿参与'] }
+  ]},
+  { name:'同理心', icon:'✨', desc:'视角转换和情感共振能力', questions:[
+    { text:'朋友跟你诉苦说被领导批评了，你第一反应是——', opts:['能感受到ta的委屈，先让ta说完','理解ta的感受，同时也会想领导为什么批评','马上帮ta分析问题出在哪','告诉ta别太在意，这很正常'] },
+    { text:'你发现一个平时开朗的同事今天明显不太对劲，你会——', opts:['找个自然的时机私下关心一下','注意到了，但不确定要不要问','可能不会注意到','注意到了，但觉得是私事不该过问'] },
+    { text:'有人跟你倾诉一个你觉得"没什么大不了"的问题，你会——', opts:['意识到对ta来说是大事，尊重ta的感受','忍不住想劝ta往好处想','不太理解为什么这事这么严重','直接说"这有什么好纠结的"'] },
+    { text:'你听到一个来自完全不同文化背景的人的做法，你的反应是——', opts:['很好奇ta的背景如何塑造了这个选择','觉得有趣，但不太理解','下意识觉得有点奇怪','按自己的标准判断对不对'] },
+    { text:'别人给你反馈说你某件事做得不好，你的第一反应是——', opts:['先接纳对方的感受，再想想ta说的有没有道理','有点不舒服，但会认真听','本能想解释或辩解','不太在意别人的评价'] }
+  ]},
+  { name:'领导力', icon:'🚀', desc:'主动性、决策力和影响力', questions:[
+    { text:'项目突然遇到紧急问题，但没人站出来，你会——', opts:['快速判断最关键的下一步，主动分配任务','先提一个初步方向，让大家一起讨论','等有人牵头了再配合','默默做好自己手上的事'] },
+    { text:'团队士气低落，进度落后，你——', opts:['分析根本原因，制定恢复计划，同时给大家鼓劲','提议开个会，大家一起想办法','自己加把劲多做一些','觉得不是自己能改变的'] },
+    { text:'需要向上级汇报一个不太好的消息，你——', opts:['带着问题和解决方案一起汇报','先说明问题，再提议怎么处理','硬着头皮汇报，等领导指示','能拖就拖，希望情况好转'] },
+    { text:'你做了一个决定，后来发现可能不够好，你——', opts:['主动承认并及时调整，不让面子影响判断','私下调整方向，不太声张','维持原决定，避免显得反复','很难接受自己判断失误'] },
+    { text:'团队中有两个人发生冲突，你——', opts:['分别了解情况，找到共识点，促成对话','劝大家和气一些','不想卷入，让他们自己解决','选择站一边'] }
+  ]},
+  { name:'脑洞达人', icon:'💡', desc:'发散思维和非常规联想能力', questions:[
+    { text:'如果让你用"雨伞"设计一个新产品，你会——', opts:['先拆解雨伞的结构和功能，再重新组合','联想雨伞的隐喻，从概念出发','在雨伞上加一些新功能','想不出来，雨伞就是雨伞'] },
+    { text:'头脑风暴时，你的风格是——', opts:['提出看似天马行空的想法，再从中找可行性','在别人想法的基础上延伸','主要提实操性强的建议','不太喜欢头脑风暴，更喜欢独立思考'] },
+    { text:'你看到一个普通的物品（比如回形针），你能想到多少种非常规用途——', opts:['5种以上，越想越有趣','3-4种，有些挺有意思','1-2种比较合理的','除了夹纸想不到别的'] },
+    { text:'当所有人对某个问题都在用同一种思路时，你——', opts:['会想"如果反过来呢？"或"有没有完全不同的入口？"','偶尔会有不同的想法冒出来','觉得大家的思路应该是对的','跟着大方向走'] },
+    { text:'你对"规则"和"惯例"的态度是——', opts:['规则是用来被挑战的，先问"为什么必须这样"','可以在规则内找缝隙创新','规则存在有道理，尽量遵守','严格遵守，不折腾'] }
+  ]},
+  { name:'演讲表达', icon:'📢', desc:'结构化表达、心理舒适度和观众意识', questions:[
+    { text:'临时被叫上台做3分钟分享，你的状态是——', opts:['脑子里快速搭框架，然后开讲','有点紧张，但能组织出主要内容','心跳加速，勉强说出几个要点','大脑一片空白'] },
+    { text:'演讲时你注意到台下有人在看手机，你会——', opts:['调整节奏或加一个互动环节，重新吸引注意力','有点受影响，但继续讲','心里有点挫败，但面不改色','不太关注台下反应'] },
+    { text:'别人让你"简单说说你的想法"时，你——', opts:['能迅速用2-3句话抓住核心','能说清楚，但可能比较啰嗦','需要想一会儿才能组织语言','经常说完觉得没表达到位'] },
+    { text:'你讲完一段话，对方说"我没太听懂"，你——', opts:['不觉得是对方的问题，换一种方式重新解释','稍微调整再说一遍','有点沮丧，觉得自己表达不行','觉得对方理解力有问题'] },
+    { text:'在非正式场合（饭局、聚会）被点名发言，你——', opts:['能自然地接住，说几句得体又有趣的话','能说，但有点拘谨','很不自在，说几句就结束','能躲就躲'] }
+  ]},
+  { name:'情绪调节', icon:'🧘', desc:'认知重评能力和情绪觉察', questions:[
+    { text:'忙了一天回家发现快递丢了，你会——', opts:['先处理问题（联系快递），同时觉察自己有点烦躁但不过度','告诉自己不算大事，很快能过去','心里烦一会儿，刷手机转移注意力','越想越气，情绪影响好一阵子'] },
+    { text:'重要的面试/汇报之前，你感到很紧张，你会——', opts:['接纳紧张是正常的，做几次呼吸调整，专注准备内容','告诉自己"没什么大不了"来压住紧张','尽量让自己分心想别的','紧张到无法集中注意力'] },
+    { text:'你和亲近的人发生了争吵，事后你——', opts:['能冷静回顾：我真正在气什么？对方的立场是什么？','觉得双方都有问题，想和好','一直在想对方哪里不对','情绪很激动，很难冷静下来'] },
+    { text:'你做了一个让你后悔的决定，你会——', opts:['承认后悔，分析原因以避免重复，然后放下','反思一下，但还是会想很久','不断回想"如果当时……就好了"','很难原谅自己'] },
+    { text:'你正在做一件很重要的事，但不断被消息打断，你——', opts:['意识到烦躁在积累，主动设一个"免打扰"时段','忍着烦躁继续做','一边处理消息一边做，效率很低','很烦，最后什么都做不好'] }
+  ]}
+];
+let flatQuestions = [];
+CATS.forEach((cat, ci) => {
+  cat.questions.forEach((q, qi) => {
+    flatQuestions.push({ catIdx: ci, qIdx: qi, text: q.text, opts: q.opts, catName: cat.name, catIcon: cat.icon });
+  });
+});
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+flatQuestions = shuffle(flatQuestions);
+const TOTAL = flatQuestions.length;
+const answers = {};
+function startQuiz() {
+  document.getElementById('startScreen').classList.remove('active');
+  document.getElementById('quizScreen').classList.add('active');
+  renderQuiz();
+}
+function renderQuiz() {
+  const c = document.getElementById('quizContent');
+  const letters = ['A','B','C','D'];
+  let h = '';
+  flatQuestions.forEach((q, idx) => {
+    h += `<div class="q-card" id="qcard-${idx}">
+      <div class="q-tag">${q.catIcon} ${q.catName}</div>
+      <div class="q-text"><span style="color:#2d6cdf;font-weight:700;">${idx+1}.</span> ${q.text}</div>
+      <div class="options">`;
+    q.opts.forEach((o, oi) => {
+      h += `<div class="opt-btn" data-idx="${idx}" data-oi="${oi}" onclick="pick(this,${idx},${oi})">
+        <span class="opt-letter">${letters[oi]}</span>${o}</div>`;
+    });
+    h += `</div></div>`;
+  });
+  c.innerHTML = h;
+  updateProgress();
+}
+function pick(el, idx, oi) {
+  answers[idx] = oi;
+  const card = document.getElementById(`qcard-${idx}`);
+  card.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  updateProgress();
+}
+function updateProgress() {
+  const n = Object.keys(answers).length;
+  document.getElementById('progressFill').style.width = (n/TOTAL*100)+'%';
+  document.getElementById('progressLabel').textContent = `${n} / ${TOTAL}`;
+  document.getElementById('btnSubmit').disabled = n < TOTAL;
+  if (n >= TOTAL) document.getElementById('unansweredTip').style.display = 'none';
+}
+function submitQuiz() {
+  const n = Object.keys(answers).length;
+  if (n < TOTAL) {
+    document.getElementById('unansweredTip').style.display = 'block';
+    for (let i = 0; i < TOTAL; i++) {
+      if (answers[i] === undefined) {
+        document.getElementById(`qcard-${i}`).scrollIntoView({behavior:'smooth',block:'center'});
+        return;
+      }
+    }
+    return;
+  }
+  document.getElementById('quizScreen').classList.remove('active');
+  document.getElementById('loadingOverlay').classList.add('show');
+  const scores = CATS.map(() => 0);
+  flatQuestions.forEach((q, idx) => {
+    const oi = answers[idx];
+    scores[q.catIdx] += (4 - oi);
+  });
+  const result = CATS.map((cat, ci) => ({
+    name: cat.name, icon: cat.icon, score: scores[ci], max: cat.questions.length * 4
+  }));
+  setTimeout(() => {
+    document.getElementById('loadingOverlay').classList.remove('show');
+    document.getElementById('resultScreen').classList.add('active');
+    drawResult(result);
+    buildSummary(result);
+  }, 1200);
+}
+function drawResult(scores) {
+  const canvas = document.getElementById('resultCanvas');
+  const dpr = Math.min(window.devicePixelRatio || 2, 3);
+  const cw = 380, ch = 560;
+  canvas.width = cw * dpr; canvas.height = ch * dpr;
+  canvas.style.width = '100%';
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  ctx.fillStyle = '#faf8f5';
+  ctx.fillRect(0, 0, cw, ch);
+  ctx.fillStyle = '#333';
+  ctx.font = 'bold 22px "PingFang SC","Microsoft YaHei",sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('作战能力小瓶子', cw/2, 36);
+  ctx.font = '13px "PingFang SC","Microsoft YaHei",sans-serif';
+  ctx.fillStyle = '#999';
+  ctx.fillText('你的能力档案', cw/2, 54);
+  const cols = 3, rows = 3;
+  const cellW = cw / cols;
+  const cellH = (ch - 72) / rows;
+  const bW = 60, bH = 84, bNeckW = 28, bNeckH = 14, bR = 12;
+  scores.forEach((s, i) => {
+    const col = i % cols, row = Math.floor(i / cols);
+    const cx = cellW * col + cellW / 2;
+    const cy = 72 + cellH * row + cellH / 2 - 8;
+    const bL = cx - bW/2, bT = cy - bH/2 + bNeckH, bRt = cx + bW/2, bB = cy + bH/2;
+    ctx.beginPath();
+    ctx.moveTo(cx - bNeckW/2, bT);
+    ctx.lineTo(cx - bNeckW/2, bT - bNeckH);
+    ctx.lineTo(cx + bNeckW/2, bT - bNeckH);
+    ctx.lineTo(cx + bNeckW/2, bT);
+    ctx.strokeStyle = '#444'; ctx.lineWidth = 2; ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(cx - bNeckW/2 - 3, bT - bNeckH);
+    ctx.lineTo(cx + bNeckW/2 + 3, bT - bNeckH);
+    ctx.strokeStyle = '#444'; ctx.lineWidth = 2.5; ctx.stroke();
+    function bodyPath(inset) {
+      const d = inset || 0;
+      ctx.beginPath();
+      ctx.moveTo(bL + bR + d, bT + d);
+      ctx.lineTo(bRt - bR - d, bT + d);
+      ctx.quadraticCurveTo(bRt - d, bT + d, bRt - d, bT + bR + d);
+      ctx.lineTo(bRt - d, bB - bR - d);
+      ctx.quadraticCurveTo(bRt - d, bB - d, bRt - bR - d, bB - d);
+      ctx.lineTo(bL + bR + d, bB - d);
+      ctx.quadraticCurveTo(bL + d, bB - d, bL + d, bB - bR - d);
+      ctx.lineTo(bL + d, bT + bR + d);
+      ctx.quadraticCurveTo(bL + d, bT + d, bL + bR + d, bT + d);
+      ctx.closePath();
+    }
+    bodyPath(0);
+    ctx.strokeStyle = '#444'; ctx.lineWidth = 2; ctx.stroke();
+    const pct = s.score / s.max;
+    if (pct > 0.01) {
+      const liqH = (bH - 8) * pct;
+      const liqTop = bB - 4 - liqH;
+      ctx.save();
+      bodyPath(2); ctx.clip();
+      const grad = ctx.createLinearGradient(0, liqTop, 0, bB);
+      grad.addColorStop(0, 'rgba(45,108,223,0.35)');
+      grad.addColorStop(1, 'rgba(45,108,223,0.65)');
+      ctx.fillStyle = grad;
+      ctx.fillRect(bL + 2, liqTop, bW - 4, bB - liqTop - 2);
+      ctx.beginPath();
+      ctx.moveTo(bL + 2, liqTop);
+      ctx.quadraticCurveTo(cx, liqTop - 4, bRt - 2, liqTop);
+      ctx.lineTo(bRt - 2, liqTop + 4);
+      ctx.quadraticCurveTo(cx, liqTop, bL + 2, liqTop + 4);
+      ctx.closePath();
+      ctx.fillStyle = 'rgba(45,108,223,0.22)';
+      ctx.fill();
+      ctx.beginPath();
+      ctx.ellipse(bL + 12, liqTop + liqH * 0.3, 4, Math.max(liqH * 0.2, 2), 0, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(255,255,255,0.3)';
+      ctx.fill();
+      ctx.restore();
+    }
+    ctx.fillStyle = '#2d6cdf';
+    ctx.font = 'bold 16px "PingFang SC","Microsoft YaHei",sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(Math.round(pct*100)+'%', cx, cy + 2);
+    ctx.fillStyle = '#333';
+    ctx.font = '13px "PingFang SC","Microsoft YaHei",sans-serif';
+    ctx.fillText(s.icon + ' ' + s.name, cx, bB + 20);
+  });
+}
+function buildSummary(scores) {
+  const sorted = [...scores].sort((a,b) => b.score - a.score);
+  const top = sorted[0], bottom = sorted[sorted.length-1];
+  document.getElementById('resultSubtitle').textContent = `满分战士 ${top.name}，修炼方向 ${bottom.name}`;
+  document.getElementById('resultSummary').innerHTML = `
+    <p class="super-power">${top.icon} 你的超能力：${top.name} ${Math.round(top.score/top.max*100)}%</p>
+    <p class="growth-area">${bottom.icon} 修炼方向：${bottom.name} ${Math.round(bottom.score/bottom.max*100)}%</p>
+    <p class="detail-text">每个瓶子代表一项能力，蓝色液面越高说明你在这方面的倾向越强。这不是能力的上限，而是当前的习惯倾向——任何能力都可以通过练习提升！</p>`;
+}
+function saveResult() {
+  const canvas = document.getElementById('resultCanvas');
+  try {
+    canvas.toBlob(blob => {
+      if (blob) {
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = '作战能力小瓶子.png';
+        document.body.appendChild(a); a.click();
+        document.body.removeChild(a);
+      }
+    }, 'image/png');
+  } catch(e) { alert('请长按图片保存，或截图分享'); }
+}
+function retryQuiz() {
+  Object.keys(answers).forEach(k => delete answers[k]);
+  flatQuestions = shuffle(flatQuestions);
+  document.getElementById('resultScreen').classList.remove('active');
+  document.getElementById('startScreen').classList.add('active');
+  document.getElementById('progressFill').style.width = '0%';
+  document.getElementById('progressLabel').textContent = '0 / 45';
+}
 </script>
 </body>
 </html>
